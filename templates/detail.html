@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block custumcss %}
+
+{% endblock %}
+
+{% block header %}
+<div class="alert alert-primary" role="alert">
+    <a href="{% url 'list' %}" >社内SNS</a>
+</div>
+{% endblock header %}
+
+
+{% block content %}
+<div class="container">
+    <div class="alert alert-success" role="alert">
+        <P>タイトル:{{ object.title }}</P>
+        <p>投稿者{{ object.author }}</p>
+        <p>内容{{ object.content }}</p>
+        <p><img src='{{object.images.url}}' width=300></p>
+        <a href="{% url 'good' object.pk %}" class="btn btn-primary">いいね{{object.good}}</a>
+        <a href="{% url 'read' object.pk %}" class="btn btn-secondary">既読にする</a>
+    </div>
+    <a href="{% url 'logout' %}">logout</a>
+</div>
+{% endblock content %}
