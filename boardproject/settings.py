@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'u1l_ltwgcy$hys*1xmf$4^pw4!a#rd!9$*tvux%mjht2ku+s!q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['b16a419e054e471d9a5edd6601ef968b.vfs.cloud9.ap-northeast-1.amazonaws.com','https://pacific-cove-04525.herokuapp.com/']
+ALLOWED_HOSTS = ['b16a419e054e471d9a5edd6601ef968b.vfs.cloud9.ap-northeast-1.amazonaws.com','https://pacific-cove-04525.herokuapp.com/', 'ide.pythonanywhere.com']
 
 
 # Application definition
