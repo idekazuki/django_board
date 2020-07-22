@@ -2,10 +2,13 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
-from .models import BoardModel
+from .models import BoardModel, Tweet, Qiita
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
+from .collect_tweet import collect_tweet
+from .collect_qiita import collect_qiita
+
 
 
 
@@ -21,7 +24,7 @@ def signupfunc(request):
             return render(request, 'signup.html', {'error': 'このユーザーは登録されています'})
         except:
             user = User.objects.create_user(username2, '', password2)
-            return render(request, 'signup.html', {'some': 1009})
+            return redirect('list')
     return render(request, 'signup.html', {'some': 100})
     
 def loginfunc(request):
@@ -39,8 +42,23 @@ def loginfunc(request):
           
 @login_required  
 def listfunc(request):
-    object_list = BoardModel.objects.all()
-    return render(request, 'list.html', {'object_list': object_list})
+    object_list = BoardModel.objects.order_by('-update_at').all()
+    tweets = Tweet.objects.all()
+    #api 読み込み
+    #collect_tweet()
+    #collect_qiita()
+    
+    qiita = Qiita.objects.all()
+    tweet_url = []
+    for tweet in tweets:
+        link_url = 'https://twitter.com/' +  tweet.user_screen_name +  '/status/' + str(tweet.uni_id)
+        tweet_url.append(link_url)
+    return render(request, 'list.html', {'object_list': object_list, 'tweets': tweet_url, 'qiita': qiita})
+  
+def api_func(request):
+    collect_tweet()
+    collect_qiita()
+    return redirect('list')
     
 def logoutfunc(request):
     logout(request)
@@ -72,3 +90,4 @@ class BoardCreate(CreateView):
     model = BoardModel
     fields = ('title', 'content', 'author', 'images')
     success_url = reverse_lazy('list')
+    

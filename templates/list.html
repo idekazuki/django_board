@@ -1,21 +1,92 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block custumcss %}
+<link rel='stylesheet' type='text/css' href="{% static 'style.css' %}">
 
-{% endblock %}
+{% endblock custumcss %}
 
 {% block header %}
-<div class="alert alert-primary" role="alert">
-    <a href="{% url 'list' %}" >社内SNS</a>
+<div class='fixed-top'>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <a class="navbar-brand" href="{% url 'list' %}">Python info</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarText">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        {% if user.is_authenticated %}
+        <a class="nav-link" href="{% url 'logout' %}">logout</a>
+        {% else %}
+        <a class="nav-link" href="{% url 'logout' %}">login</a>
+        {% endif %}
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'signup' %}">signup</a>
+      </li>
+    </ul>
+    <span class="navbar-text">
+      Pythonに関する情報をまとめたサイト
+    </span>
+  </div>
+</nav>
+</div>
+<!--<div class="alert alert-primary" role="alert">-->
+<!--    <a href="{% url 'list' %}" >Python info</a>-->
+<!--    <a href="{% url 'signup' %}">Signup</a>-->
+<!--    <a href="{% url 'login' %}">login</a>-->
+<!--</div>-->
+
+<div class="container">
+  <h1> pythonについての情報をまとめています。</h1>
+  <div class="card">
+      <a>qiitaのHotTag情報</a>
+    <div class="row" align="center"> 
+            <div class="col-md-2 col-sm-2 col-lg-2">
+                <a>tag <br> tag数 <br>follwer数</a>
+            </div>
+            {% for qii in qiita %}
+            {% if qii.items == "Python" %}
+            <div class="col-md-1 col-sm-1 col-lg-1">
+              <div style="padding: 0px; margin-bottom: 10px; border: 5px double #333333;">
+                <a>{{qii.items}}</a>
+                <a>{{qii.items_count}}</a>
+                <a>{{qii.followers_count}}</a>
+                <p><a><img border="1" src={{ qii.icon_url }} width="20" height="20" alt={{ qii.items }}></a></p>
+              </div>
+            </div>
+            {% else %}
+            <div class="col-md-1 col-sm-1 col-lg-1">
+                <a>{{qii.items}}</a>
+                <a>{{qii.items_count}}</a>
+                <a>{{qii.followers_count}}</a>
+                <p><a><img border="1" src={{ qii.icon_url }} width="20" height="20" alt={{ qii.items }}></a></p>
+            </div>
+            {% endif %}
+            
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock header %}
 
 
 {% block content %}
 <div class="container">
-    <p>
-        <a href="{% url 'create' %}" class="btn btn-primary" >新規作成</a>
-    </p>
+<script type="text/javascript" src="https://ssl.gstatic.com/trends_nrtr/2213_RC01/embed_loader.js"></script> <script type="text/javascript"> trends.embed.renderExploreWidget("TIMESERIES", {"comparisonItem":[{"keyword":"/m/05z1_","geo":"","time":"today 5-y"}],"category":0,"property":""}, {"exploreQuery":"date=today%205-y&q=%2Fm%2F05z1_","guestPath":"https://trends.google.co.jp:443/trends/embed/"}); </script> </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8  col-sm-8 col-lg-8">
+          <br>
+          <div>
+          <span>掲示板</span>
+          <span>  &ensp; </span>
+          <a href="{% url 'create' %}" class="btn btn-primary" >新規作成</a>
+          <a href="{% url 'api' %}" class="btn btn-info" >情報の更新</a>
+          </div>
+
     {% for item in object_list %}
     <div class="alert alert-success" role="alert">
         <P>タイトル:<a href="{% url 'detail' item.pk %}">{{ item.title }}</a></P>
@@ -25,5 +96,18 @@
     </div>
     {% endfor %}
     <a href="{% url 'logout' %}">logout</a>
+    </div>
+    
+    <div class="col-md-4 col-sm-4 col-lg-4">
+        <div class="card">
+        <h3>python というワードを含むretweet 10以上のtweet</h3>
+        {% for tweet in tweets %}
+            <blockquote class="twitter-tweet"><p lang="en" dir="ltr"></p><a href={{ tweet }}></a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        {% endfor %}
+        </div>
+    </div>
+    </div>
 </div>
+
+
 {% endblock content %}
